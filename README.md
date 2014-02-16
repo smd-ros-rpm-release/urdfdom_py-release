@@ -1,3 +1,22 @@
+## urdfdom_py - 0.3.0-0
+
+User `isucan@isucan-glaptop0` released the packages in the `urdfdom_py` repository by running `/usr/bin/bloom-release -t indigo -r indigo --new-track urdfdom_py` on `Sun, 16 Feb 2014 04:00:21 -0000`
+
+The `urdfdom_py` package was released.
+
+Version of package(s) in repository `urdfdom_py`:
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.3.0-0`
+
+Versions of tools used:
+- bloom version: `0.4.9`
+- catkin_pkg version: `0.1.26`
+- rosdep version: `0.10.25`
+- rosdistro version: `0.3.4`
+- vcstools version: `0.1.33`
+
+
 ## urdfdom_py - 0.2.9-9
 
 User `isucan@i7` released the packages in the `urdfdom_py` repository by running `/usr/local/bin/bloom-release -t hydro -r hydro urdfdom_py` on `Tue, 10 Sep 2013 12:27:20 -0000`
