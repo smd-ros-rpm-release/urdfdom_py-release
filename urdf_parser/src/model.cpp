@@ -38,27 +38,12 @@
 #include <vector>
 #include "urdf_parser/urdf_parser.h"
 #include <console_bridge/console.h>
-#include <fstream>
 
 namespace urdf{
 
 bool parseMaterial(Material &material, TiXmlElement *config, bool only_name_is_ok);
 bool parseLink(Link &link, TiXmlElement *config);
 bool parseJoint(Joint &joint, TiXmlElement *config);
-
-boost::shared_ptr<ModelInterface>  parseURDFFile(const std::string &path)
-{
-    std::ifstream stream( path.c_str() );
-    if (!stream)
-    {
-      logError(("File " + path + " does not exist").c_str());
-      return boost::shared_ptr<ModelInterface>();
-    }
-
-    std::string xml_str((std::istreambuf_iterator<char>(stream)),
-	                     std::istreambuf_iterator<char>());
-    return urdf::parseURDF( xml_str );
-}
 
 boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
 {
@@ -67,13 +52,6 @@ boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
 
   TiXmlDocument xml_doc;
   xml_doc.Parse(xml_string.c_str());
-  if (xml_doc.Error())
-  {
-    logError(xml_doc.ErrorDesc());
-    xml_doc.ClearError();
-    model.reset();
-    return model;
-  }
 
   TiXmlElement *robot_xml = xml_doc.FirstChildElement("robot");
   if (!robot_xml)
@@ -111,7 +89,7 @@ boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
       else
       {
         model->materials_.insert(make_pair(material->name,material));
-        logDebug("urdfdom: successfully added a new material '%s'", material->name.c_str());
+        logDebug("successfully added a new material '%s'", material->name.c_str());
       }
     }
     catch (ParseError &e) {
@@ -139,21 +117,21 @@ boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
       else
       {
         // set link visual material
-        logDebug("urdfdom: setting link '%s' material", link->name.c_str());
+        logDebug("setting link '%s' material", link->name.c_str());
         if (link->visual)
         {
           if (!link->visual->material_name.empty())
           {
             if (model->getMaterial(link->visual->material_name))
             {
-              logDebug("urdfdom: setting link '%s' material to '%s'", link->name.c_str(),link->visual->material_name.c_str());
+              logDebug("setting link '%s' material to '%s'", link->name.c_str(),link->visual->material_name.c_str());
               link->visual->material = model->getMaterial( link->visual->material_name.c_str() );
             }
             else
             {
               if (link->visual->material)
               {
-                logDebug("urdfdom: link '%s' material '%s' defined in Visual.", link->name.c_str(),link->visual->material_name.c_str());
+                logDebug("link '%s' material '%s' defined in Visual.", link->name.c_str(),link->visual->material_name.c_str());
                 model->materials_.insert(make_pair(link->visual->material->name,link->visual->material));
               }
               else
@@ -167,7 +145,7 @@ boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
         }
 
         model->links_.insert(make_pair(link->name,link));
-        logDebug("urdfdom: successfully added a new link '%s'", link->name.c_str());
+        logDebug("successfully added a new link '%s'", link->name.c_str());
       }
     }
     catch (ParseError &e) {
@@ -199,7 +177,7 @@ boost::shared_ptr<ModelInterface>  parseURDF(const std::string &xml_string)
       else
       {
         model->joints_.insert(make_pair(joint->name,joint));
-        logDebug("urdfdom: successfully added a new joint '%s'", joint->name.c_str());
+        logDebug("successfully added a new joint '%s'", joint->name.c_str());
       }
     }
     else
@@ -257,19 +235,19 @@ TiXmlDocument*  exportURDF(const ModelInterface &model)
 
   for (std::map<std::string, boost::shared_ptr<Material> >::const_iterator m=model.materials_.begin(); m!=model.materials_.end(); m++)
   {
-    logDebug("urdfdom: exporting material [%s]\n",m->second->name.c_str());
+    logDebug("exporting material [%s]\n",m->second->name.c_str());
     exportMaterial(*(m->second), robot);
   }
 
   for (std::map<std::string, boost::shared_ptr<Link> >::const_iterator l=model.links_.begin(); l!=model.links_.end(); l++)  
   {
-    logDebug("urdfdom: exporting link [%s]\n",l->second->name.c_str());
+    logDebug("exporting link [%s]\n",l->second->name.c_str());
     exportLink(*(l->second), robot);
   }
   	
   for (std::map<std::string, boost::shared_ptr<Joint> >::const_iterator j=model.joints_.begin(); j!=model.joints_.end(); j++)  
   {
-    logDebug("urdfdom: exporting joint [%s]\n",j->second->name.c_str());
+    logDebug("exporting joint [%s]\n",j->second->name.c_str());
     exportJoint(*(j->second), robot);
   }
 
