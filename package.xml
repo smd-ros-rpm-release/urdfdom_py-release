@@ -22,7 +22,8 @@
 
   <build_depend>python</build_depend>
 
-  <run_depend>python</run_depend>
   <run_depend>catkin</run_depend>
+  <run_depend>python</run_depend>
+  <run_depend>python-lxml</run_depend>
   
 </package>
